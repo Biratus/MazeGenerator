@@ -53,5 +53,5 @@ var SIDE_RIGHT=1<<1;
 var SIDE_UP=1<<2;
 var SIDE_DOWN=1<<3;
 
-var CELL_NB=20;
+var CELL_NB=30;
 var CELL_SIZE;

@@ -1,3 +1,10 @@
+var stackTrace=[];
+var currIndex=0;
+var FrameRate=25;
+var cells=[];
+var canvas;
+var ctx;
+
 window.onload=function() {
 	canvas = document.getElementById("canvas");
 	ctx=canvas.getContext("2d");
@@ -20,6 +27,7 @@ function update() {
 	if(nexts.length==0) {
 		if(stackTrace.length==0) {
 			console.log("Maze done");
+			for(var i in cells) cells[i].draw();
 			return;
 		}
 		currIndex=stackTrace.pop();
@@ -87,14 +95,3 @@ function getNeighbors(cell) {
 	}
 	return neigh;
 }
-
-function getCell(i,j) {
-
-}
-
-var stackTrace=[];
-var currIndex=0;
-var FrameRate=100;
-var cells=[];
-var canvas;
-var ctx;
