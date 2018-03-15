@@ -18,7 +18,7 @@ window.onload=function() {
 	cells[currIndex].current=true;
 	stackTrace.push(currIndex);
 	for(var i in cells) cells[i].draw();
-	update();
+	//update();
 }
 
 function update() {
