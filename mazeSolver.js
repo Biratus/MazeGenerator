@@ -2,6 +2,8 @@ var mazeSolver;
 
 function MazeSolver() {
 	this.currentCell=cells[0];
+	this.isActive=true;
+	cells[Math.floor(Math.random() * cells.length)+Math.floor(CELL_NB*0.2)].target=true;
 	this.currentCell.current=true;
 	this.keyPress=function(e) {
 		switch(e.keyCode) {
@@ -31,12 +33,17 @@ function MazeSolver() {
 			}
 		}
 		draw();
+		if(this.currentCell.target) {
+			this.isActive=false;
+			console.log("WIN !!");
+		}
 	}
 	this.updatePosition=function(cell) {
 		if(this.currentCell.isOpenTo(cell)) {
 			this.currentCell.current=false;
 			this.currentCell=cell;
 			this.currentCell.current=true;
+			this.currentCell.solveVisited=true;
 		}
 	}
 }
@@ -47,11 +54,11 @@ function getCell(x,y) {
 }
 
 function startSolving() {
-	mazeSolver=new MazeSolver();
+	mazeSolver=mazeSolver||new MazeSolver();
 	draw();
 }
 
 
 window.addEventListener('keydown',function(e) {
-	if(mazeSolver) mazeSolver.keyPress(e);
+	if(mazeSolver && mazeSolver.isActive) mazeSolver.keyPress(e);
 });

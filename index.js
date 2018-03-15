@@ -1,10 +1,11 @@
 var stackTrace=[];
 var currIndex=0;
-var FrameRate=25;
+var FrameRate=1;
 var cells=[];
 var canvas;
 var ctx;
 var CELL_NB=10;
+var timeout;
 
 window.onload=function() {
 	canvas = document.getElementById("canvas");
@@ -34,7 +35,7 @@ function update() {
 		currIndex=stackTrace.pop();
 		cells[currIndex].current=true;
 		draw();
-		setTimeout(update,FrameRate);
+		timeout=setTimeout(update,FrameRate);
 		return;
 	}
 
@@ -51,7 +52,7 @@ function update() {
 
 	draw();
 
-	setTimeout(update,FrameRate);
+	timeout = setTimeout(update,FrameRate);
 }
 
 function removeLineBetween(cell1,cell2) {
@@ -96,5 +97,24 @@ function getNeighbors(cell) {
 }
 
 function draw() {
+	ctx.clearRect(0,0,canvas.width,canvas.height);
 	for(var i in cells) cells[i].draw();
+}
+
+function changeCellNb() {
+	CELL_NB=document.getElementById("cellnb").value;
+	if(timeout) clearTimeout(timeout);
+	cells=[];
+	CELL_SIZE=canvas.width/CELL_NB;
+	for(var y=0;y<CELL_NB;y++) {
+		for(var x=0;x<CELL_NB;x++) {
+			cells.push(new Cell(x,y));
+		}
+	}
+	currIndex=0;
+	cells[currIndex].visited=true;
+	cells[currIndex].current=true;
+	stackTrace.push(currIndex);
+	draw();
+	update();
 }

@@ -4,11 +4,18 @@ function Cell(x,y){
 	this.sides=0b1111;
 
 	this.visited=false;
+	this.target=false;
 	this.current=false;
+
+	this.solveVisited=false;
 
 	this.draw=function() {
 		if(this.current) {
 			ctx.fillStyle="#3ADF00";
+			ctx.fillRect(x*CELL_SIZE,y*CELL_SIZE,CELL_SIZE,CELL_SIZE);
+			ctx.fillStyle="#00000";
+		} else if(this.target) {
+			ctx.fillStyle="#FE2E2E";
 			ctx.fillRect(x*CELL_SIZE,y*CELL_SIZE,CELL_SIZE,CELL_SIZE);
 			ctx.fillStyle="#00000";
 		} else if(this.visited) {
@@ -16,6 +23,11 @@ function Cell(x,y){
 			ctx.fillRect(x*CELL_SIZE,y*CELL_SIZE,CELL_SIZE,CELL_SIZE);
 			ctx.fillStyle="#00000";
 		} 
+		if(this.solveVisited) {
+			ctx.fillStyle="#3ADF00";
+			ctx.fillRect(x*CELL_SIZE+CELL_SIZE/3,y*CELL_SIZE+CELL_SIZE/3,CELL_SIZE/3,CELL_SIZE/3);
+			ctx.fillStyle="#00000";
+		}
 		if(this.sides & SIDE_LEFT){
 			ctx.beginPath();
 			ctx.moveTo(x*CELL_SIZE,y*CELL_SIZE);
