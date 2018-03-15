@@ -4,35 +4,47 @@ function Cell(x,y){
 	this.sides=0b1111;
 
 	this.visited=false;
+	this.current=false;
 
 	this.draw=function() {
+		if(this.current) {
+			ctx.fillStyle="#3ADF00";
+			ctx.fillRect(x*CELL_SIZE,y*CELL_SIZE,CELL_SIZE,CELL_SIZE);
+			ctx.fillStyle="#00000";
+		} else if(this.visited) {
+			ctx.fillStyle="#610B5E";
+			ctx.fillRect(x*CELL_SIZE,y*CELL_SIZE,CELL_SIZE,CELL_SIZE);
+			ctx.fillStyle="#00000";
+		} 
 		if(this.sides & SIDE_LEFT){
 			ctx.beginPath();
-			ctx.moveTo(x,y);
-			ctx.lineTo(x,y+CELL_SIZE);
+			ctx.moveTo(x*CELL_SIZE,y*CELL_SIZE);
+			ctx.lineTo(x*CELL_SIZE,y*CELL_SIZE+CELL_SIZE);
 			ctx.stroke();
 		} 
 		if(this.sides & SIDE_RIGHT) {
 			ctx.beginPath();
-			ctx.moveTo(x+CELL_SIZE,y);
-			ctx.lineTo(x+CELL_SIZE,y+CELL_SIZE);
+			ctx.moveTo(x*CELL_SIZE+CELL_SIZE,y*CELL_SIZE);
+			ctx.lineTo(x*CELL_SIZE+CELL_SIZE,y*CELL_SIZE+CELL_SIZE);
 			ctx.stroke();
 		}
 		if(this.sides & SIDE_UP) {
 			ctx.beginPath();
-			ctx.moveTo(x,y);
-			ctx.lineTo(x+CELL_SIZE,y);
+			ctx.moveTo(x*CELL_SIZE,y*CELL_SIZE);
+			ctx.lineTo(x*CELL_SIZE+CELL_SIZE,y*CELL_SIZE);
 			ctx.stroke();
 		}
 		if(this.sides & SIDE_DOWN) {
 			ctx.beginPath();
-			ctx.moveTo(x,y+CELL_SIZE);
-			ctx.lineTo(x+CELL_SIZE,y+CELL_SIZE);
+			ctx.moveTo(x*CELL_SIZE,y*CELL_SIZE+CELL_SIZE);
+			ctx.lineTo(x*CELL_SIZE+CELL_SIZE,y*CELL_SIZE+CELL_SIZE);
 			ctx.stroke();
 		}
 	}
 
-
+	this.removeSide=function(side) {
+		this.sides-=side;
+	}
 
 }
 
