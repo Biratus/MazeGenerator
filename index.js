@@ -4,7 +4,7 @@ var FrameRate=25;
 var cells=[];
 var canvas;
 var ctx;
-//lol
+var CELL_NB=10;
 
 window.onload=function() {
 	canvas = document.getElementById("canvas");
@@ -18,8 +18,8 @@ window.onload=function() {
 	cells[currIndex].visited=true;
 	cells[currIndex].current=true;
 	stackTrace.push(currIndex);
-	for(var i in cells) cells[i].draw();
-	//update();
+	draw();
+	update();
 }
 
 function update() {
@@ -28,12 +28,12 @@ function update() {
 	if(nexts.length==0) {
 		if(stackTrace.length==0) {
 			console.log("Maze done");
-			for(var i in cells) cells[i].draw();
+			startSolving();
 			return;
 		}
 		currIndex=stackTrace.pop();
 		cells[currIndex].current=true;
-		for(var i in cells) cells[i].draw();
+		draw();
 		setTimeout(update,FrameRate);
 		return;
 	}
@@ -49,9 +49,7 @@ function update() {
 	currIndex=nexts[rndInd].x+nexts[rndInd].y*CELL_NB;
 	stackTrace.push(currIndex);
 
-	for(var i in cells) cells[i].draw();
-
-
+	draw();
 
 	setTimeout(update,FrameRate);
 }
@@ -95,4 +93,8 @@ function getNeighbors(cell) {
 		if(!c.visited) neigh.push(c);
 	}
 	return neigh;
+}
+
+function draw() {
+	for(var i in cells) cells[i].draw();
 }

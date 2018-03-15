@@ -2,33 +2,41 @@ var mazeSolver;
 
 function MazeSolver() {
 	this.currentCell=cells[0];
-	this.isActive=false;
+	this.currentCell.current=true;
 	this.keyPress=function(e) {
 		switch(e.keyCode) {
 			case 40://down
 			{
 				var c = getCell(this.currentCell.x,this.currentCell.y+1);
-				if(c) updatePosition(c);
+				if(c) this.updatePosition(c);
 				break;	
 			}
 			case 38://up
 			{
 				var c = getCell(this.currentCell.x,this.currentCell.y-1);
-				if(c) updatePosition(c);
+				if(c) this.updatePosition(c);
 				break;	
 			}
 			case 37://left
 			{
 				var c = getCell(this.currentCell.x-1,this.currentCell.y);
-				if(c) updatePosition(c);
+				if(c) this.updatePosition(c);
 				break;	
 			}
 			case 39://right
 			{
 				var c = getCell(this.currentCell.x+1,this.currentCell.y);
-				if(c) updatePosition(c);
+				if(c) this.updatePosition(c);
 				break;	
 			}
+		}
+		draw();
+	}
+	this.updatePosition=function(cell) {
+		if(this.currentCell.isOpenTo(cell)) {
+			this.currentCell.current=false;
+			this.currentCell=cell;
+			this.currentCell.current=true;
 		}
 	}
 }
@@ -40,6 +48,7 @@ function getCell(x,y) {
 
 function startSolving() {
 	mazeSolver=new MazeSolver();
+	draw();
 }
 
 

@@ -46,6 +46,22 @@ function Cell(x,y){
 		this.sides-=side;
 	}
 
+	this.isOpenTo=function(cell) {
+		if(this.x==cell.x) {//same column
+			if(cell.y>this.y) {//this above cell
+				return !(this.sides & SIDE_DOWN);
+			} else {
+				return !(this.sides & SIDE_UP);
+			}
+		} else if(this.y==cell.y) {//same line
+			if(cell.x>this.x) {//cell right of this
+				return !(this.sides & SIDE_RIGHT);
+			} else {
+				return !(this.sides & SIDE_LEFT);
+			}
+		}
+	}
+
 }
 
 var SIDE_LEFT=1<<0;
@@ -53,5 +69,4 @@ var SIDE_RIGHT=1<<1;
 var SIDE_UP=1<<2;
 var SIDE_DOWN=1<<3;
 
-var CELL_NB=30;
 var CELL_SIZE;
