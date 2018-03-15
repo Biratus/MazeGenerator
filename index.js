@@ -1,10 +1,11 @@
 window.onload=function() {
 	canvas = document.getElementById("canvas");
 	ctx=canvas.getContext("2d");
-	for(var x=0;x<canvas.width;x+=CELL_SIZE) {
-		for(var y=0;y<canvas.height;y+=CELL_SIZE) {
+	CELL_SIZE=canvas.width/CELL_NB;
+	for(var y=0;y<canvas.height;y+=CELL_SIZE) {
+		for(var x=0;x<canvas.width;x+=CELL_SIZE) {
 			cells.push(new Cell(x,y));
-		}	
+		}
 	}
 
 	update();
@@ -22,7 +23,20 @@ function update() {
 }
 
 function getNeighbors(cell) {
+	var neigh=[];
+	if(cell.x!=0) {//not on the left
+		
+	}
+	if(cell.x+CELL_SIZE+1<canvas.width) {//not on the right
 
+	}
+	if(cell.y!=0) {//not on the top
+
+	}
+	if(cell.y+CELL_SIZE+1<canvas.height) {//not on bot
+
+	}
+	return neigh;
 }
 
 function getCell(i,j) {
