@@ -4,6 +4,7 @@ var FrameRate=25;
 var cells=[];
 var canvas;
 var ctx;
+//lol
 
 window.onload=function() {
 	canvas = document.getElementById("canvas");
