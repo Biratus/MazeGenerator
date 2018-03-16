@@ -7,27 +7,27 @@ function Cell(x,y){
 	this.target=false;
 	this.current=false;
 
+	this.color="#ffffff";
+
 	this.solveVisited=false;
 
+	this.properties=[];
+
+	this.update=function() {
+		
+		this.draw();
+	}
+
 	this.draw=function() {
-		if(this.current) {
-			ctx.fillStyle="#3ADF00";
-			ctx.fillRect(x*CELL_SIZE,y*CELL_SIZE,CELL_SIZE,CELL_SIZE);
-			ctx.fillStyle="#00000";
-		} else if(this.target) {
-			ctx.fillStyle="#FE2E2E";
-			ctx.fillRect(x*CELL_SIZE,y*CELL_SIZE,CELL_SIZE,CELL_SIZE);
-			ctx.fillStyle="#00000";
-		} else if(this.visited) {
-			ctx.fillStyle="#610B5E";
-			ctx.fillRect(x*CELL_SIZE,y*CELL_SIZE,CELL_SIZE,CELL_SIZE);
-			ctx.fillStyle="#00000";
-		} 
-		if(this.solveVisited) {
-			ctx.fillStyle="#3ADF00";
-			ctx.fillRect(x*CELL_SIZE+CELL_SIZE/3,y*CELL_SIZE+CELL_SIZE/3,CELL_SIZE/3,CELL_SIZE/3);
-			ctx.fillStyle="#00000";
-		}
+		/*if(this.current) {
+			this.color="#3ADF00";
+		} else if(this.properties["target"]) {
+			this.color="#FE2E2E";
+		} else this.color="#610B5E";*/
+		
+		ctx.fillStyle=this.color;
+		ctx.fillRect(x*CELL_SIZE,y*CELL_SIZE,CELL_SIZE,CELL_SIZE);
+		ctx.fillStyle="#00000";
 		if(this.sides & SIDE_LEFT){
 			ctx.beginPath();
 			ctx.moveTo(x*CELL_SIZE,y*CELL_SIZE);
@@ -54,6 +54,14 @@ function Cell(x,y){
 		}
 	}
 
+	this.tryProperties=function() {
+		for(var key in this.properties) {
+			if(this.properties[key].test && this.properties[key].test(this)) {
+				this.properties[key].ontestcomplete(this);
+			}
+		}
+	}
+
 	this.removeSide=function(side) {
 		this.sides-=side;
 	}
@@ -74,6 +82,19 @@ function Cell(x,y){
 		}
 	}
 
+	this.addProperty=function(key,value,test,testcomplete) {
+		this.properties[key]={"value":value,"test":test,"ontestcomplete":testcomplete};
+	}
+
+	this.setProperty=function(key,value) {
+		if(this.properties[key]) {
+			this.properties[key].value=value;
+		}
+	}
+
+	this.getProperty=function(key) {
+		return this.properties[key].value;
+	}
 }
 
 var SIDE_LEFT=1<<0;

@@ -1,6 +1,6 @@
 var stackTrace=[];
 var currIndex=0;
-var FrameRate=1;
+var FrameRate=10;
 var cells=[];
 var canvas;
 var ctx;
@@ -10,22 +10,13 @@ var timeout;
 window.onload=function() {
 	canvas = document.getElementById("canvas");
 	ctx=canvas.getContext("2d");
-	CELL_SIZE=canvas.width/CELL_NB;
-	for(var y=0;y<CELL_NB;y++) {
-		for(var x=0;x<CELL_NB;x++) {
-			cells.push(new Cell(x,y));
-		}
-	}
-	cells[currIndex].visited=true;
-	cells[currIndex].current=true;
-	stackTrace.push(currIndex);
-	draw();
-	update();
+	initCell();
 }
 
 function update() {
 	var nexts = getNeighbors(cells[currIndex]);
-	cells[currIndex].current=false;
+	cells[currIndex].setProperty("current",false);
+	cells[currIndex].tryProperties();
 	if(nexts.length==0) {
 		if(stackTrace.length==0) {
 			console.log("Maze done");
@@ -33,8 +24,9 @@ function update() {
 			return;
 		}
 		currIndex=stackTrace.pop();
-		cells[currIndex].current=true;
-		draw();
+		cells[currIndex].setProperty("current",true);
+		cells[currIndex].tryProperties();
+		updateCells();
 		timeout=setTimeout(update,FrameRate);
 		return;
 	}
@@ -42,15 +34,16 @@ function update() {
 
 	var rndInd = Math.floor(Math.random() * nexts.length);
 
-	nexts[rndInd].visited=true;
-	nexts[rndInd].current=true;
+	nexts[rndInd].setProperty("visited",true);
+	nexts[rndInd].setProperty("current",true);
+	nexts[rndInd].tryProperties();
 
 	removeLineBetween(cells[currIndex],nexts[rndInd]);
 
 	currIndex=nexts[rndInd].x+nexts[rndInd].y*CELL_NB;
 	stackTrace.push(currIndex);
 
-	draw();
+	updateCells();
 
 	timeout = setTimeout(update,FrameRate);
 }
@@ -79,42 +72,45 @@ function getNeighbors(cell) {
 	var neigh=[];
 	if(cell.x!=0) {//not on the left
 		var c = cells[cell.x-1+cell.y*CELL_NB];
-		if(!c.visited) neigh.push(c);
+		if(!c.getProperty("visited")) neigh.push(c);
 	}
 	if(cell.x+1<CELL_NB) {//not on the right
 		var c = cells[cell.x+1+cell.y*CELL_NB];
-		if(!c.visited) neigh.push(c);
+		if(!c.getProperty("visited")) neigh.push(c);
 	}
 	if(cell.y!=0) {//not on the top
 		var c = cells[cell.x+(cell.y-1)*CELL_NB];
-		if(!c.visited) neigh.push(c);
+		if(!c.getProperty("visited")) neigh.push(c);
 	}
 	if(cell.y+1<CELL_NB) {//not on bot
 		var c = cells[cell.x+(cell.y+1)*CELL_NB];
-		if(!c.visited) neigh.push(c);
+		if(!c.getProperty("visited")) neigh.push(c);
 	}
 	return neigh;
 }
 
-function draw() {
+function updateCells() {
 	ctx.clearRect(0,0,canvas.width,canvas.height);
-	for(var i in cells) cells[i].draw();
+	for(var i in cells) cells[i].update();
 }
 
-function changeCellNb() {
-	CELL_NB=document.getElementById("cellnb").value;
-	if(timeout) clearTimeout(timeout);
-	cells=[];
+function initCell() {
+	CELL_NB=document.getElementById("cellnb").value.length>0?document.getElementById("cellnb").value:CELL_NB;
 	CELL_SIZE=canvas.width/CELL_NB;
+	cells=[];
 	for(var y=0;y<CELL_NB;y++) {
 		for(var x=0;x<CELL_NB;x++) {
-			cells.push(new Cell(x,y));
+			var c = new Cell(x,y)
+			c.addProperty("visited",false,function(cell){return !this.value;},function(cell){cell.color="#610B5E";});
+			c.addProperty("current",false,function(cell){return true;},function(cell){cell.color=this.value?"#3ADF00":"#610B5E";});
+			cells.push(c);
 		}
 	}
 	currIndex=0;
-	cells[currIndex].visited=true;
-	cells[currIndex].current=true;
+	cells[currIndex].setProperty("current",true);
+	cells[currIndex].setProperty("visited",true);
+	cells[currIndex].tryProperties();
 	stackTrace.push(currIndex);
-	draw();
+	updateCells();
 	update();
 }
