@@ -1,20 +1,89 @@
 <html>
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-    <script type="text/javascript" src="index2.js"></script>
-   <!--  <script type="text/javascript" src="Cell.js"></script> -->
-    <script type="text/javascript" src="mazeSolver.js"></script>
+    <head>
+        <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+        <script>
+            // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyAhW32jE52AbIlCl_Bmuqnn0PeDijfz_Eo",
+                authDomain: "mazegenerator-f308a.firebaseapp.com",
+                databaseURL: "https://mazegenerator-f308a.firebaseio.com",
+                projectId: "mazegenerator-f308a",
+                storageBucket: "",
+                messagingSenderId: "811370336377"
+            };
+            firebase.initializeApp(config);
+        </script>
+        <script
+                src="https://code.jquery.com/jquery-3.3.1.min.js"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+                crossorigin="anonymous"></script>
+        <script type="text/javascript" src="bootstrap.min.js"></script>
+        <script type="text/javascript" src="index.js"></script>
+        <script type="text/javascript" src="Exploration.js"></script>
+        <script type="text/javascript" src="Fusion.js"></script>
+
+        <link rel="stylesheet" href="bootstrap.min.css"/>
     </head>
-<style>
- canvas {
- 	border: 1px solid black;
- }
-</style>
-<body>
-	<canvas id="canvas" width="800" height="800" >
-	</canvas>
-	Number of cells: <input id="cellnb" type="number"/>
-	<input type="button" onclick="initCell()" value="Ok">
-	</body>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+
+        .modifiers{
+            margin:1em;
+            width:50%;
+        }
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 15px;
+            border-radius: 5px;   
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%; 
+            background: #4CAF50;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #4CAF50;
+            cursor: pointer;
+        }
+    </style>
+    <body>
+        <canvas id="canvas" width="800" height="800" >
+        </canvas>
+        <div class="input-group mb-3 modifiers">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Number of cells: </span>
+            </div>
+            <input type="number" id="cellnb" class="form-control" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" onclick="changeCellNb()">Go!</button>
+            </div>
+        </div>
+        <div class="btn-group modifiers" role="group" aria-label="Basic example">
+            <button type="button" onclick="firstAlgo()" class="btn btn-secondary">Run with exploration algorithm</button>
+            <button type="button" onclick="secAlgo()" class="btn btn-secondary">Run with fusion algorithm</button>
+            <button type="button" onclick="stop()" class="btn btn-danger">Stop</button>
+        </div>
+        <div class="modifiers">
+            <span id="timeRate">Time Rate : 100</span>
+            <input id="timeRate_slider" class="slider" type="range" min="10" max="500" step="5" value="100"/>
+        </div>
+
+    </body>
 </html>
