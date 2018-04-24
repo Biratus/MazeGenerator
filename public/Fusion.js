@@ -115,6 +115,7 @@ function FusionCell(x,y,i) {
     this.highlight;
     
     this.draw=function() {
+        console.log('draw');
         ctx.fillStyle="#ffffff";
         ctx.fillRect(this.x*CELL_SIZE,this.y*CELL_SIZE,CELL_SIZE,CELL_SIZE);
         ctx.fillStyle="#00000";

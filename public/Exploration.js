@@ -20,7 +20,7 @@ function Exploration() {
         cells[this.currIndex].current=false;
         if(nexts.length==0) {
             if(this.stackTrace.length==0) {
-                alert("Maze done");
+                console.log("Maze done");
                 stop();
                 return;
             }
